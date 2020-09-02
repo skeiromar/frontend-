@@ -70,6 +70,7 @@ class App extends React.Component {
   }
 
   render() {
+
     return (
       <div>
         {/* <button onClick={this.handleLogout}>logout</button> */}
@@ -78,17 +79,17 @@ class App extends React.Component {
         <>
           <Route path="" render={(props) =>
             <NavigationBar handleLogout={this.handleLogout} user={this.state.user} isLoggedIn={this.state.isLoggedIn} {...props} />} />
-          <Route path="/cartPage" render={(props) => <CartPage {...props} handleLogin={this.handleLogin} user={this.state.user}/>} />
+          <Route path="/cartPage" render={(props) => <CartPage {...props} handleLogin={this.handleLogin} isLoggedIn={this.state.isLoggedIn} user={this.state.user}/>} />
+          <Route path='/productDisplayPage/:productId' user={this.state.user} component={ProductDisplayPage}/>
         </>
         : ""
       }
         {/* <Browse/> */}
       <Switch>
         <Route exact path="/" render={(props) => <SplashPage {...props} loggedInStatus={this.state.isLoggedIn}/>} />
-        <Route path="/login" render={(props) => <Login {...props} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn} />} />
-        <Route path="/signup" render={(props) => <Signup {...props} handleLogin={this.handleLogin} loggedInStatus={this.state.isLoggedIn}/>} />
+        <Route path="/login" render={(props) => <Login {...props} handleLogin={this.handleLogin} isLoggedIn={this.state.isLoggedIn} />} />
+        <Route path="/signup" render={(props) => <Signup {...props} handleLogin={this.handleLogin} isLoggedIn={this.state.isLoggedIn}/>} />
         <Route path="/browse" component={Browse} user={this.state.user} />
-        <Route path='/productDisplayPage/:productId' component={ProductDisplayPage}/>
       </Switch>
     </div>
     );

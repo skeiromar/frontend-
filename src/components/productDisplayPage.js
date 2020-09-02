@@ -95,7 +95,6 @@ export default class ProductDisplayPage extends Component {
   }
 
   handleAddToCart = () => {
-
     if (!this.props.history.user) {
       this.props.history.push('/login')
       return false;
@@ -108,7 +107,7 @@ export default class ProductDisplayPage extends Component {
       },
       body: JSON.stringify({
         product_id: this.state.product.id,
-        user_id: this.props.history.user.id
+        user_id: this.props.history.user?.id
       })
     })
     .then((response) => response.json())
@@ -153,7 +152,9 @@ export default class ProductDisplayPage extends Component {
 
           {/* product price */}
           <div className="pdpProductPrice">
-            <h3>${this.state.product.price}</h3>
+            <h3
+              className="pdpProductPriceH3"
+            >${this.state.product.price}</h3>
           </div>
 
           {/* add to cart button */}

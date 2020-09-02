@@ -1,12 +1,37 @@
 import React, { Component } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
+import ProductCard from './productCard';
 
 import '../styles/splashPage.css';
 
 export default class SplashPage extends Component {
+  state = {
+    products: []
+  }
+
+  componentDidMount() {
+    fetch("http://localhost:3001/trendingProducts")
+    .then((response) => response.json())
+    .then(data => {
+      console.log(data)
+      // let sortedData = data.filter();
+      this.setState({
+          products: data
+      });
+    });
+  }
+
+  handleRedirectPDP = (productId) => {
+    this.props.history.push(`productDisplayPage/${productId}`);
+  }
+
   render() {
+    let products = this.state.products.map(product => (
+      <ProductCard product={product} key={product.id} handleRedirectPDP={this.handleRedirectPDP}/>
+    ));
+
     return (
-      <div>
+      <div className="pageContainer">
         <div className="carouselContainer">
           <Carousel>
             <Carousel.Item>
@@ -30,6 +55,20 @@ export default class SplashPage extends Component {
             </Carousel.Item>
           </Carousel>
         </div>
+
+        <div
+          className="trendingItemsHeaderContainer"
+        >
+          <h1>Trending Items</h1>
+        </div>
+        <div
+          className="browseProductsContainer"
+        >
+          {products}
+        </div>
+
+
+
       </div>
     )
   }

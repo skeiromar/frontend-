@@ -14,11 +14,13 @@ export default class NavigationBar extends Component {
       this.setState({isLoggedIn: true})
     }
   }
-  // componentDidUpdate(prevProps) {
-  //   if (this.props.history.user !== prevProps.history.user) {
-  //     this.setState({isLoggedIn: false})
-  //   }
-  // }
+  componentDidUpdate(prevProps) {
+    // console.log('navbar', this.props, prevProps)
+    if (this.props.isLoggedIn !== prevProps.isLoggedIn) {
+      this.setState({isLoggedIn: this.props.isLoggedIn})
+    }
+  }
+
 
   handleRedirectLogin = () => {
     this.props.history.push('/login')

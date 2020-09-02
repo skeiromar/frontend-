@@ -11,6 +11,11 @@
   font-weight: bold;
 }
 
+.authPageForm {
+  display: flex;
+  flex-direction: column;
+}
+
 .loginUsername {
   border: 1.8px solid #B9B6BC;
   border-radius: 8px;
@@ -45,7 +50,6 @@
   color: white;
   background: #7f187f;
   border-radius: 50vw;
-  width: 38%;
   font-size: 15px;
   text-align: center;
   height: 45px;

@@ -1,5 +1,24 @@
 
 
+
 .splashCarouselImage {
   height: 400px;
+}
+
+.browseProductsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  height: auto;
+  font-family: 'Montserrat';
+  margin-top: 50px;
+  margin-left: 20px;
+}
+
+
+.trendingItemsHeaderContainer {
+  width: 100%;
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  /* color: white; */
 }

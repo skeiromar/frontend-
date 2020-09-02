@@ -140,3 +140,9 @@
   display: flex;
   justify-content: center;
 }
+
+.emptyCartPageTextContainer {
+  width: 100%;
+  text-align: center;
+  color: purple;
+}

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import {Alert} from 'react-bootstrap';
+
 
 import '../../styles/authStyles.css'
 
@@ -7,7 +9,23 @@ export default class Signup extends Component {
     username: "",
     password: "",
     errors: "",
+    isAlertOn: false,
+    alertMessage: ''
   };
+
+  componentDidMount() {
+    if (this.props.isLoggedIn) {
+      this.props.history.push('/browse')
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.isLoggedIn !== prevProps.isLoggedIn) {
+      if (this.props.isLoggedIn) {
+        this.props.history.push('/browse')
+      }
+    }
+  }
 
   handleChange = (e) => {
     this.setState({
@@ -15,7 +33,8 @@ export default class Signup extends Component {
     });
   };
 
-  handleSubmit = () => {
+  handleSubmit = (e) => {
+    e.preventDefault();
     const { username, password } = this.state;
     let user = {
       username: username,
@@ -36,7 +55,15 @@ export default class Signup extends Component {
     })
       .then(r => r.json())
       .then(res => {
+        if (res.error) {
+          this.setState({
+            alertMessage: res.error[0],
+            isAlertOn: true
+          });
+          return false;
+        }
         localStorage.setItem('token', res.jwt)
+        this.props.handleLogin(res);
         this.props.history.push('/browse');
       })
 
@@ -75,25 +102,34 @@ export default class Signup extends Component {
           <h3 className="loginHeader">
             Create an account!
           </h3>
-          <input
-            className="loginUsername"
-            placeholder="username"
-            name="username"
-            value={this.state.username}
-            onChange={this.handleChange}
-            type="text" />
-          <input
-            className="loginPassword"
-            placeholder="password"
-            name="password"
-            value={this.state.password}
-            onChange={this.handleChange}
-            type="password" />
-
-          <button
-            onClick={this.handleSubmit}
-            className="loginSubmitButton"
-          >Sign Up</button>
+          <form onSubmit={this.handleSubmit} className="authPageForm">
+            <input
+              className="loginUsername"
+              placeholder="username"
+              name="username"
+              value={this.state.username}
+              onChange={this.handleChange}
+              type="text"
+            />
+            <input
+              className="loginPassword"
+              placeholder="password"
+              name="password"
+              value={this.state.password}
+              onChange={this.handleChange}
+              type="password"
+            />
+            {this.state.isAlertOn &&
+              <Alert variant="danger">
+                {this.state.alertMessage}
+              </Alert>
+            }
+            <input
+              type="submit"
+              value="Sign Up"
+              className="loginSubmitButton"
+            />
+          </form>
         </div>
       </div>
     )

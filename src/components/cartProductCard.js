@@ -93,6 +93,7 @@ export default class CartProductCart extends Component {
 
               <button
                 className="cartRemoveItemButton"
+                onClick={() => this.props.removeItem(this.props.product.id)}
               >
               <img
                 style={{width: '30px'}}

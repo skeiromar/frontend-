@@ -14,7 +14,7 @@ export default class ProductCard extends Component {
               <img className="image" alt="" src={this.props.product.imageTray} />
             </div>
 
-              <div className="favButton">favorites button</div>
+              {/* <div className="favButton">favorites button</div> */}
 
           </div>
         </div>
@@ -30,7 +30,13 @@ export default class ProductCard extends Component {
             >${this.props.product.price}</span>
           </div>
           <div className="productReviews">
-            <span>number of reviews(optional)</span>
+
+              {this.props.product.reviewCount !== 1 ?
+              <span>Reviewed by {this.props.product.reviewCount} people</span>
+              :
+              <span>Reviewed by {this.props.product.reviewCount} person</span>
+              }
+
           </div>
         </div>
       </div>
