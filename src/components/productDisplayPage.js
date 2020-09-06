@@ -68,12 +68,19 @@ export default class ProductDisplayPage extends Component {
   }
 
   handleDeleteComment = (reviewId) => {
+    if (!this.props.history.user) {
+      this.props.history.push('/login')
+      return false;
+    }
     fetch(`http://localhost:3001/reviews/${reviewId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json'
-      }
+      },
+      body: JSON.stringify({
+        user_id: this.props.history.user.id
+      })
     })
     .then((response) => response.json())
     .then(data => {

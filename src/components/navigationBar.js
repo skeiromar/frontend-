@@ -37,9 +37,25 @@ export default class NavigationBar extends Component {
     if (!this.props.user?.id) {
       this.props.history.push('/login')
       return false;
-    } else {
-      this.props.history.push('/cartPage')
     }
+    this.props.history.push('/cartPage')
+  }
+
+  filterByCategory = (category) => {
+    this.props.filterByCategory(category);
+  }
+
+  browseRedirect = () => {
+    this.props.filterByCategory('');
+    this.props.history.push('/browse')
+  }
+
+  handleFilterFavorites = () => {
+    if (!this.props.user?.id) {
+      this.props.history.push('/login')
+      return false;
+    }
+    this.props.filterForFavorites();
   }
 
   render() {
@@ -61,13 +77,24 @@ export default class NavigationBar extends Component {
                   <Button
                     variant="success"
                     className="navBarBrowseButton"
-                    onClick={() => this.props.history.push('/browse')}
+                    onClick={this.browseRedirect}
                   >Browse</Button>
                 <DropdownButton id="dropdown-basic-button" title="Categories">
-                  <Dropdown.Item href="#/action-1">Sofas</Dropdown.Item>
+                  <Dropdown.Item onClick={() => this.filterByCategory('Sofa')}>Sofas</Dropdown.Item>
+                  <Dropdown.Item onClick={() => this.filterByCategory('Sectional')}>Sectionals</Dropdown.Item>
+                  <Dropdown.Item onClick={() => this.filterByCategory('Coffee Tables')}>Coffee Tables</Dropdown.Item>
+                  <Dropdown.Item onClick={() => this.filterByCategory('TV Stands')}>TV Stands</Dropdown.Item>
+                  <Dropdown.Item onClick={() => this.filterByCategory('Chaise Lounge Chairs')}>Chaise Lounge Chairs</Dropdown.Item>
+
+
                   {/* <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
                   <Dropdown.Item href="#/action-3">Something else</Dropdown.Item> */}
                 </DropdownButton>
+                <Button
+                  variant="warning"
+                  className="navBarFavoritesButton"
+                  onClick={this.handleFilterFavorites}
+                >Favorites</Button>
               </Nav>
               <button
                 className="navBarCartImageContainer"

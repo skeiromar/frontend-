@@ -17,7 +17,9 @@ class App extends React.Component {
 
   state = {
     isLoggedIn: null,
-    user: {}
+    user: {},
+    products: [],
+    allProducts: []
   }
 
   componentDidMount() {
@@ -29,6 +31,7 @@ class App extends React.Component {
       isLoggedIn: true,
       user: data.user
     })
+    this.props.history.user = data.user;
   }
   handleLogout = () => {
     localStorage.removeItem('token');
@@ -69,6 +72,32 @@ class App extends React.Component {
     }
   }
 
+  filterByCategory = (category) => {
+    const {allProducts} = this.state;
+    if (category === '') {
+      this.setState({
+        products: allProducts
+      })
+      return false;
+    }
+    this.setState({
+      products: allProducts.filter(product => category === product.category)
+    });
+  }
+  updateProducts = (products) => {
+    this.setState({
+      products: products,
+      allProducts: products
+    })
+  }
+
+  filterForFavorites = () => {
+    const {allProducts} = this.state;
+    this.setState({
+      products: allProducts.filter(product => true === product.isFavorited)
+    });
+  }
+
   render() {
 
     return (
@@ -78,9 +107,27 @@ class App extends React.Component {
       {this.state.isLoggedIn !== null ?
         <>
           <Route path="" render={(props) =>
-            <NavigationBar handleLogout={this.handleLogout} user={this.state.user} isLoggedIn={this.state.isLoggedIn} {...props} />} />
+            <NavigationBar
+              handleLogout={this.handleLogout}
+              user={this.state.user}
+              isLoggedIn={this.state.isLoggedIn}
+              filterByCategory={this.filterByCategory}
+              filterForFavorites={this.filterForFavorites}
+              {...props}
+            />}
+          />
           <Route path="/cartPage" render={(props) => <CartPage {...props} handleLogin={this.handleLogin} isLoggedIn={this.state.isLoggedIn} user={this.state.user}/>} />
-          <Route path='/productDisplayPage/:productId' user={this.state.user} component={ProductDisplayPage}/>
+          <Route path='/productDisplayPage/:productId'
+            user={this.state.user}
+            component={ProductDisplayPage}
+          />
+          <Route path="/browse" render={(props) =>
+          <Browse
+            {...props}
+            user={this.state.user}
+            updateProducts={this.updateProducts}
+            products={this.state.products}
+          /> }/>
         </>
         : ""
       }
@@ -89,7 +136,6 @@ class App extends React.Component {
         <Route exact path="/" render={(props) => <SplashPage {...props} loggedInStatus={this.state.isLoggedIn}/>} />
         <Route path="/login" render={(props) => <Login {...props} handleLogin={this.handleLogin} isLoggedIn={this.state.isLoggedIn} />} />
         <Route path="/signup" render={(props) => <Signup {...props} handleLogin={this.handleLogin} isLoggedIn={this.state.isLoggedIn}/>} />
-        <Route path="/browse" component={Browse} user={this.state.user} />
       </Switch>
     </div>
     );

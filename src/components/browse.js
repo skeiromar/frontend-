@@ -3,19 +3,36 @@ import '../styles/browseStyles.css'
 import ProductCard from './productCard';
 
 export default class Browse extends Component {
-  state = {
-    products: []
-  }
 
   componentDidMount() {
-    fetch("http://localhost:3001/products")
+    this.fetchProducts()
+  }
+
+  fetchProducts = () => {
+    const user_id = this.props.user;
+    fetch("http://localhost:3001/getProducts", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({
+        user_id: user_id ? user_id.id : -1
+      })
+    })
     .then((response) => response.json())
     .then(data => {
       console.log(data)
-      this.setState({
-          products: data
-      });
+      this.props.updateProducts(data)
     });
+  }
+
+  // filterByCategory = () => {
+  //   debugger
+  // }
+
+  handleRedirect = () => {
+    this.props.history.push(`/login`);
   }
 
   handleRedirectPDP = (productId) => {
@@ -23,8 +40,14 @@ export default class Browse extends Component {
   }
 
   render() {
-    let products = this.state.products.map(product => (
-      <ProductCard product={product} key={product.id} handleRedirectPDP={this.handleRedirectPDP}/>
+    let products = this.props.products.map(product => (
+      <ProductCard
+        product={product}
+        key={product.id}
+        handleRedirectPDP={this.handleRedirectPDP}
+        user={this.props.history.user}
+        handleRedirect={this.handleRedirect}
+      />
     ));
     return (
       <div className="productCards">
